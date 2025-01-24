@@ -1,7 +1,8 @@
 const User = require("../models/UserSchema.js");
 bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const createJWT = require("../utils/createJWT");
+const createCookie = require("../utils/createCookie");
 
 const saltRounds = parseInt(process.env.SALT);
 
@@ -21,11 +22,7 @@ const authController = {
     if (isPasswordCorrect) {
 
       createJWT(email, role);
-      res.cookie("jwt", jwtToken, {
-        httpOnly: true,
-        maxAge: 1000*60*60*24*5,
-        secure: process.env.NODE_ENV === "production",
-      });
+      createCookie(res, jwtToken);
 
       res.status(202).send({ msg: "User found", user: user });
     } else {
@@ -52,11 +49,7 @@ const authController = {
         user.save();
         
         const jwtToken = createJWT(email, role);
-        res.cookie("jwt", jwtToken, {
-          httpOnly: true,
-          maxAge: 1000*60*60*24*5,
-          secure: process.env.NODE_ENV === "production",
-        });
+        createCookie(res, jwtToken);
         // console.log(jwtToken, "JWT_Token");
 
         res.status(201).send({ msg: "User created", user: user });
