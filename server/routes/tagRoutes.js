@@ -10,5 +10,4 @@ router.get("/:id", tagController.getTag);
 router.put("/:id", tagController.updateTag);
 router.delete("/:id", tagController.deleteTag);
 
-
 module.exports = router;

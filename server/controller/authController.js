@@ -13,6 +13,7 @@ const authController = {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email: email });
+    const role = "user";
 
     console.log(user);
     let hashedPassword = user.password;
@@ -20,8 +21,7 @@ const authController = {
     console.log(isPasswordCorrect);
 
     if (isPasswordCorrect) {
-
-      createJWT(email, role);
+      const jwtToken = createJWT(email, role);
       createCookie(res, jwtToken);
 
       res.status(202).send({ msg: "User found", user: user });
@@ -30,7 +30,7 @@ const authController = {
     }
     // res.send(user);
   },
-  register: (req, res) => {
+  register: async (req, res) => {
     // res.send("register");
     const { email, password, repeatPassword } = req.body;
 
@@ -47,7 +47,7 @@ const authController = {
         });
         console.log(user);
         user.save();
-        
+
         const jwtToken = createJWT(email, role);
         createCookie(res, jwtToken);
         // console.log(jwtToken, "JWT_Token");
