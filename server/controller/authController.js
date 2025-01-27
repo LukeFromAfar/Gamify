@@ -8,54 +8,61 @@ const saltRounds = parseInt(process.env.SALT);
 
 const authController = {
   login: async (req, res) => {
-    // res.send("login");
+    try {
+      const { email, password } = req.body;
 
-    const { email, password } = req.body;
+      const user = await User.findOne({ email: email });
+      const role = "user";
 
-    const user = await User.findOne({ email: email });
-    const role = "user";
+      console.log(user);
+      let hashedPassword = user.password;
+      const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
+      console.log(isPasswordCorrect);
 
-    console.log(user);
-    let hashedPassword = user.password;
-    const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
-    console.log(isPasswordCorrect);
-
-    if (isPasswordCorrect) {
-      const jwtToken = createJWT(email, role);
-      createCookie(res, jwtToken);
-
-      res.status(202).send({ msg: "User found", user: user });
-    } else {
-      res.status(404).send({ msg: "User not found" });
-    }
-    // res.send(user);
-  },
-  register: async (req, res) => {
-    // res.send("register");
-    const { email, password, repeatPassword } = req.body;
-
-    let role = "user";
-
-    if (password == repeatPassword) {
-      bcrypt.hash(password, saltRounds, function (err, hash) {
-        if (err) console.log(err, "Error");
-
-        const user = new User({
-          email: email,
-          password: hash,
-          role: role,
-        });
-        console.log(user);
-        user.save();
-
-        const jwtToken = createJWT(email, role);
+      if (isPasswordCorrect) {
+        createJWT(email, role);
         createCookie(res, jwtToken);
-        // console.log(jwtToken, "JWT_Token");
 
-        res.status(201).send({ msg: "User created", user: user });
-      });
-    } else {
-      res.status(500).send({ msg: "Passwords do not match" });
+        res.status(202).send({ msg: "User found", user: user });
+      } else {
+        res.status(404).send({ msg: "User not found" });
+      }
+      // res.send(user);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ msg: "Error logging in" });
+    }
+  },
+  register: (req, res) => {
+    try {
+      const { email, password, repeatPassword } = req.body;
+
+      let role = "user";
+
+      if (password == repeatPassword) {
+        bcrypt.hash(password, saltRounds, function (err, hash) {
+          if (err) console.log(err, "Error");
+
+          const user = new User({
+            email: email,
+            password: hash,
+            role: role,
+          });
+          console.log(user);
+          user.save();
+
+          const jwtToken = createJWT(email, role);
+          createCookie(res, jwtToken);
+          // console.log(jwtToken, "JWT_Token");
+
+          res.status(201).send({ msg: "User created", user: user });
+        });
+      } else {
+        res.status(500).send({ msg: "Passwords do not match" });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ msg: "Error registering user" });
     }
   },
 };
