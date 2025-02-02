@@ -3,7 +3,7 @@ const router = express.Router();
 const reviewController = require("../controller/reviewController");
 const verifyToken = require("../middleware/verifyToken");
 
-router.post("/:gameId", verifyToken,reviewController.createReview);
+router.post("/:gameId", verifyToken, reviewController.createReview);
 router.get("/games/:id", reviewController.getReviewsByGame);
 router.get("/user/:id", reviewController.getReviewsByUser);
 
