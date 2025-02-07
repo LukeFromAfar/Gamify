@@ -12,7 +12,7 @@ const reviewRoutes = require("./routes/reviewRoutes");
 const app = express();
 app.use(cookieParser());
 let corsOptions = {
-  origin: (process.env.FRONTEND_URL),
+  origin: process.env.FRONTEND_URL,
   optionsSuccessStatus: 200,
   method: "GET, PUT, POST, DELETE",
   credentials: true,
