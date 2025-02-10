@@ -36,6 +36,14 @@ export default function GameBox() {
         {/* <p>{game.description}</p> */}
         <p>{game.image}</p>
         <p>{game.tags}</p> 
+        {game.reviews ? game.reviews.map((review) => {
+            return (
+                <div key={review._id}>
+                    <p>{review.review}</p>
+                    <p>{review.author}</p>
+                </div>
+            )
+        }) : <div>No reviews</div>}
       </div> : <div>Loading...</div>}
     </div>
   );
