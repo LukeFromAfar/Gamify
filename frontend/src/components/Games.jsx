@@ -32,7 +32,7 @@ export default function Games() {
                 {games ? 
                 games.map((game) => {
                     return (
-                    <div key={game._id} className="flex flex-col" onClick={handleClick}>
+                    <div key={game._id} className="flex flex-col" >
                         <h2>{game.title}</h2>
                         <p>{game.price} {game.discount}&#37;</p>
                         <p>{game.publisher}</p>
@@ -40,10 +40,11 @@ export default function Games() {
                         <p>{game.releaseDate}</p>
                         <p>{game.status}</p>
                         <p>{game.shortDescription}</p>
-                        <p>{game.description}</p>
+                        {/* <p>{game.description}</p> */}
                         <p>{game.image}</p>
                         <p>{game.tags}</p>
-                    </div>
+                        <button className="border-blue-200 border-4 rounded-2xl" onClick={() => handleClick(game._id)}>Enter</button>
+                    </div >
                     )
                 }) : <div>No games found</div>}
             </div>

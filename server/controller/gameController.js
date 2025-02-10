@@ -75,11 +75,6 @@ const gameController = {
       console.log(error);
       res.status(500).send({ msg: "Internal server error" });
     }
-
-    const game = await Game.findById(id);
-    console.log(game);
-
-    res.status(200).send({ msg: "Game retrieved", game: game });
   },
   editGame: async (req, res) => {
     const { id } = req.params;
