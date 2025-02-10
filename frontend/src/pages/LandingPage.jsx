@@ -1,3 +1,5 @@
+import GameBox from "./GameBox";
+
 export default function LandingPage() {
   return (
     <div>

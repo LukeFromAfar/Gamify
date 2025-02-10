@@ -27,7 +27,7 @@ const gameSchema = new Schema({
     required: true,
   },
   status: {
-    type: String,
+    type: Number,
     required: true, 
   },
   description: {
@@ -38,7 +38,7 @@ const gameSchema = new Schema({
     type: String,
     required: true,
   },
-  img: [
+  image: [
     {
         type: String,
         required: false,
